@@ -1,73 +1,67 @@
-# CineMatch
+# CineMatch 🎬
 
-CineMatch is an Android movie recommendation application developed with **Kotlin**. The app helps users discover movies based on their preferences by retrieving movie data from **The Movie Database (TMDB) API**.
+A dark, streaming-app styled Android movie discovery app built with Kotlin.
 
-The project was built as part of a mobile application programming course and focuses on Android development, API integration, data handling, and user interface implementation.
+## Setup
+
+### 1. Get a TMDB API Key
+1. Go to https://www.themdb.org/settings/api
+2. Create a free account and request an API key
+3. Copy your API key
+
+### 2. Add Your API Key
+Open `app/build.gradle` and replace `YOUR_TMDB_API_KEY_HERE`:
+```gradle
+buildConfigField "String", "TMDB_API_KEY", "\"YOUR_ACTUAL_KEY_HERE\""
+```
+
+### 3. Open in Android Studio
+- File → Open → Select the `CineMatch` folder
+- Wait for Gradle sync
+- Run on emulator or device (min SDK 24 / Android 7.0)
+
+---
+
+## Architecture
+
+```
+com.cinematch.app/
+├── activities/
+│   ├── MainActivity.kt          # Home: genre/mood/rating selection
+│   ├── MovieResultActivity.kt   # Grid of matching movies
+│   ├── MovieDetailActivity.kt   # Full movie detail + favorites
+│   └── FavoritesActivity.kt     # Saved favorites list
+├── adapters/
+│   └── MovieAdapter.kt          # RecyclerView adapter (ListAdapter + DiffUtil)
+├── model/
+│   └── Movie.kt                 # Data classes (Movie, MovieResponse)
+├── network/
+│   ├── TmdbApiService.kt        # Retrofit interface
+│   └── RetrofitClient.kt        # OkHttp + Retrofit singleton
+└── utils/
+    ├── FavoritesManager.kt      # SharedPreferences CRUD for favorites
+    └── GenreMapper.kt           # Genre IDs + Mood→Genre mapping
+```
 
 ## Features
 
-- Browse and discover movies
-- Retrieve real-time movie information from the TMDB API
-- Display movie posters, titles, ratings, and other details
-- Recommend movies based on user preferences
-- Save user preferences locally
-- Smooth image loading and movie list display
+| Feature | Implementation |
+|---|---|
+| Movie discovery | TMDB `/discover/movie` API |
+| Genre filter | 7 genres via Material Chips |
+| Mood filter | 5 moods, mapped to genres |
+| Rating filter | 5+, 6+, 7+, 8+ minimum |
+| Movie list | RecyclerView 2-col grid + Load More |
+| Movie detail | Collapsing toolbar + backdrop + poster |
+| Favorites | SharedPreferences + Gson serialization |
+| Images | Glide with placeholder |
+| UI | Dark theme, Material Design 3 |
 
 ## Tech Stack
 
-- **Kotlin**
-- **Android Studio**
-- **Retrofit** – API communication
-- **Gson** – JSON parsing
-- **Glide** – image loading
-- **RecyclerView** – movie list display
-- **SharedPreferences** – local preference storage
-- **TMDB API** – movie data
-
-## How It Works
-
-1. The application connects to the TMDB API using Retrofit.
-2. Movie data is retrieved and converted into Kotlin objects using Gson.
-3. Movies are displayed through RecyclerView.
-4. Glide is used to load movie posters efficiently.
-5. User preferences are stored locally with SharedPreferences.
-6. The application uses these preferences to provide a more personalized movie discovery experience.
-
-## Project Structure
-
-The project follows a modular Android application structure, separating:
-
-- API communication
-- Data models
-- UI components
-- User preference management
-- Movie recommendation functionality
-
-## What I Learned
-
-Through this project, I gained practical experience with:
-
-- Building Android applications with Kotlin
-- Integrating external REST APIs
-- Handling JSON data
-- Managing asynchronous API requests
-- Designing RecyclerView-based interfaces
-- Storing user data locally
-- Debugging and structuring a complete mobile application
-
-## API
-
-This project uses the **TMDB API** for movie data.
-
-To run the application, you will need your own TMDB API key.
-
-> Do not commit your API key directly to a public repository. Store it securely in your local configuration.
-
-## Author
-
-**Asiye Baran**
-
-Computer Science and Engineering  
-Sungkyunkwan University
-
-GitHub: [Asiyeee](https://github.com/Asiyeee)
+- **Language**: Kotlin
+- **UI**: ViewBinding, Material Design 3, RecyclerView
+- **Network**: Retrofit 2 + Gson + OkHttp
+- **Images**: Glide 4
+- **Storage**: SharedPreferences
+- **Async**: Kotlin Coroutines (lifecycleScope)
